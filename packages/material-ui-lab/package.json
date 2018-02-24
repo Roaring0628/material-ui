@@ -1,8 +1,8 @@
 {
-  "name": "@material-ui/lab",
+  "name": "olivier-material-ui-lab",
   "private": true,
   "author": "Material-UI Team",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.0",
   "description": "Material-UI Lab - Incubator for Material-UI React components.",
   "main": "./src/index.js",
   "keywords": [
@@ -30,8 +30,7 @@
     "test": "yarn test:unit",
     "test:unit": "cd ../../ && ./node_modules/.bin/cross-env NODE_ENV=test ./node_modules/.bin/mocha packages/material-ui-lab/src/{,**/}*.spec.js",
     "test:watch": "yarn test:unit --watch",
-    "version": "yarn build",
-    "release": "np --no-publish --any-branch",
+    "release": "yarn build",
     "postrelease": "npm publish build"
   },
   "peerDependencies": {
@@ -42,6 +41,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "lerna": "^2.9.0",
     "material-ui": "^1.0.0-beta.33",
     "material-ui-icons": "^1.0.0-beta.17"
   },
