@@ -1,8 +1,8 @@
 {
   "name": "olivier-material-ui-icons",
-  "private": true,
+  "private": false,
   "author": "Material-UI Team",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Material Design Svg Icons converted to Material-UI React components.",
   "main": "./src/index.js",
   "keywords": [
@@ -32,8 +32,9 @@
     "test": "yarn test:unit",
     "test:unit": "cd ../../ && ./node_modules/.bin/cross-env NODE_ENV=test ./node_modules/.bin/mocha packages/material-ui-icons/test/index.spec.js",
     "test:watch": "yarn test:unit --watch",
-    "release": "yarn build",
-    "postrelease": "npm publish build"
+    "version": "echo version && yarn build",
+    "publish": "echo publish",
+    "postpublish": "echo postpublish && npm publish build"
   },
   "peerDependencies": {
     "material-ui": "^1.0.0-beta.16",
