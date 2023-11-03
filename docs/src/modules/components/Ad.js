@@ -111,11 +111,6 @@ export const AD_MARGIN_TOP = 3;
 export const AD_MARGIN_BOTTOM = 3;
 export const AD_HEIGHT = 126;
 
-// https://stackoverflow.com/a/20084661
-function isBot() {
-  return /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
-}
-
 export default function Ad() {
   const [adblock, setAdblock] = React.useState(null);
   const [carbonOut, setCarbonOut] = React.useState(null);
@@ -126,7 +121,7 @@ export default function Ad() {
   let children;
   let label;
   // Hide the content to google bot to avoid its indexation.
-  if ((typeof window !== 'undefined' && isBot()) || disableAd) {
+  if ((typeof window !== 'undefined' && /Googlebot/.test(navigator.userAgent)) || disableAd) {
     children = <span />;
   } else if (adblock) {
     if (randomAdblock < 0.2) {

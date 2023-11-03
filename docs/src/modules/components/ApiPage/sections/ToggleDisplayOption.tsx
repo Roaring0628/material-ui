@@ -8,7 +8,7 @@ import TableChartRoundedIcon from '@mui/icons-material/TableChartRounded';
 import ReorderRoundedIcon from '@mui/icons-material/ReorderRounded';
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 
-type ApiDisplayOptions = 'collapsed' | 'expended' | 'table';
+export type ApiDisplayOptions = 'collapsed' | 'expended' | 'table';
 
 const options: ApiDisplayOptions[] = ['collapsed', 'expended', 'table'];
 const DEFAULT_LAYOUT: ApiDisplayOptions = 'expended';
@@ -21,13 +21,8 @@ export const API_LAYOUT_STORAGE_KEYS = {
   classes: 'apiPage_classes',
 } as const;
 
-// https://stackoverflow.com/a/20084661
-function isBot() {
-  return /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
-}
-
-function getRandomOption() {
-  if (isBot()) {
+const getRandomOption = () => {
+  if (/bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent)) {
     // When crawlers visit the page, they should not have to expand items
     return DEFAULT_LAYOUT;
   }
@@ -47,11 +42,11 @@ function getRandomOption() {
     // Do nothing
   }
   return randomOption;
-}
+};
 
 let neverHydrated = true;
 
-function getOption(storageKey: string) {
+const getOption = (storageKey: string) => {
   if (neverHydrated) {
     return DEFAULT_LAYOUT;
   }
@@ -68,27 +63,32 @@ function getOption(storageKey: string) {
   } catch (error) {
     return DEFAULT_LAYOUT;
   }
-}
+};
 
 export function useApiPageOption(
   storageKey: string,
 ): [ApiDisplayOptions, (newOption: ApiDisplayOptions) => void] {
   const [option, setOption] = React.useState(getOption(storageKey));
+  const [needsScroll, setNeedsScroll] = React.useState(false);
 
   useEnhancedEffect(() => {
     neverHydrated = false;
     const newOption = getOption(storageKey);
     setOption(newOption);
+    setNeedsScroll(newOption !== DEFAULT_LAYOUT);
   }, [storageKey]);
 
   React.useEffect(() => {
-    if (option !== DEFAULT_LAYOUT) {
-      const id = document.location.hash.slice(1);
-      const element = document.getElementById(id);
-      element?.scrollIntoView();
+    setNeedsScroll(false);
+    if (needsScroll) {
+      return () => {
+        const id = document?.location.hash.slice(1);
+        const element = document.getElementById(id);
+        element?.scrollIntoView();
+      };
     }
-    return undefined;
-  }, [option]);
+    return () => {};
+  }, [needsScroll]);
 
   const updateOption = React.useCallback(
     (newOption: ApiDisplayOptions) => {
@@ -129,7 +129,7 @@ type TooltipToggleButtonProps = ToggleButtonProps & {
 };
 
 // Catch props and forward to ToggleButton
-const TooltipToggleButton = React.forwardRef<HTMLButtonElement, TooltipToggleButtonProps>(
+const TooltipToggleButton: React.FC<TooltipToggleButtonProps> = React.forwardRef(
   ({ title, TooltipProps: tooltipProps, ...props }, ref) => {
     return (
       <Tooltip {...tooltipProps} title={title}>
